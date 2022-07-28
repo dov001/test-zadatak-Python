@@ -1,6 +1,5 @@
 import pandas as pd
 import spacy
-import sklearn
 from matplotlib import pyplot as plt
 import json
 import requests
@@ -15,23 +14,25 @@ output1 = pd.merge(df1, df2,
                    how='inner')
 
 # druga tacka
-print(output1['isGood'].isna().sum())
-print(output1['averageRating'].isna().sum())
+print('Broj redova u kojima nije popunjena vrednost kolone isGood: ', output1['isGood'].isna().sum())
 
 # treca tacka
 output1['averageRating'] = output1['averageRating'].fillna(0)
 
 # cetvrta tacka
 df = output1.loc[(output1['startYear'] > 2000) & (output1['averageRating'] > 3)]
+print('Broj redova u kojima je godina početka emitovanja iznad 2000 i prosečna ocena gledalaca iznad 3: ', len(df))
 print(df)
-print(len(df))
 
 # peta tacka - histogram
-plt.title("Prosečna ocena")
+plt.title("Histogram")
+plt.xlabel("prosečna ocena")
+plt.ylabel("broj elemenata")
 plt.hist(output1.averageRating, bins=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
 # sesta tacka
 new_df = output1.groupby('titleType')['averageRating'].mean()
+print('Prosečna vrednost ocene za svaku kategoriju videa:')
 print(new_df)
 
 # sedma tacka - spacy 'similarity'
